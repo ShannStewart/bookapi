@@ -10,19 +10,33 @@ class App extends Component {
     searchTerm: null
   }
 
+ 
+
   handleFetch = (fetchTerm) => {
+
+   function populateSearch(book) {
+     console.log("populateSearch ran");
+      console.log("The book should be full: " + JSON.stringify(book));
+    }
+
     console.log('handleFetch ran: ' + fetchTerm);
+
+    var book = {}
+
+    console.log("The book is empty: " + JSON.stringify(book));
+
     fetch(fetchTerm)
     .then(response => response.json())
     .then(responseJSON => {
       console.log(responseJSON);
-      console.log(responseJSON.items[0].volumeInfo.title);
-      console.log(responseJSON.items[0].volumeInfo.authors[0]);
-      console.log(responseJSON.items[0].saleInfo.listPrice.amount);
-      console.log(responseJSON.items[0].saleInfo.listPrice.currencyCode);
-      console.log(responseJSON.items[0].searchInfo.textSnippet);
-    })
-    //.catch(console.log('There has been a search error'));
+      
+      book.name = responseJSON.items[0].volumeInfo.title;
+      book.author = responseJSON.items[0].volumeInfo.authors[0];
+      book.price = responseJSON.items[0].saleInfo.listPrice.amount;
+      book.currency = responseJSON.items[0].saleInfo.listPrice.currencyCode;
+      book.summery = responseJSON.items[0].searchInfo.textSnippet;
+      populateSearch(book);
+    });
   }
 
   
