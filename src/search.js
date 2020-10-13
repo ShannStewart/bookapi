@@ -3,11 +3,11 @@ import Form from './form'
 import Filter from './filter'
 
 class Search extends Component {
+
     render(){
         return(
             <div>
-                <h1>Search!</h1>
-                <Form/>
+                <Form onSearch={this.props.onSearch}/>
                 <Filter/>
             </div>
         )
