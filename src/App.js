@@ -9,9 +9,18 @@ class App extends Component {
     search: null,
     searchTerm: null,
     bookList: [],
+    eBook: null,
   }
 
- 
+  handleEFilter = (eStat) => {
+    //console.log('handle E Filter ran');
+    //console.log(eStat);
+
+    this.setState({
+      eBook: eStat
+    });
+
+  }
 
   handleFetch = (fetchTerm) => {
 
@@ -94,7 +103,7 @@ class App extends Component {
     return (
       <div className="App">
        <h1 className="title" >Google Book Search</h1>
-       <Search onSearch={this.handleSearch}/>
+       <Search onSearch={this.handleSearch} onE={this.handleEFilter}/>
        {realList}
       </div>
     );

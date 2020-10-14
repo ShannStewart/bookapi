@@ -16,7 +16,7 @@ class Book extends Component {
                 <h2>By: {author}</h2>
                 <p>Price: {price}</p>
                 <p>About: {summery}</p>
-                <a target="_blank" href={link}>Book Page</a>
+                <a target="_blank" rel="noopener noreferrer" href={link}>Book Page</a>
             </div>
            
         )

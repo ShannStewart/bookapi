@@ -8,7 +8,7 @@ class Search extends Component {
         return(
             <div>
                 <Form onSearch={this.props.onSearch}/>
-                <Filter/>
+                <Filter onE={this.props.onE}/>
             </div>
         )
     }
