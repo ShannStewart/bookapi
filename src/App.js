@@ -7,37 +7,54 @@ class App extends Component {
   
   state = {
     search: null,
-    searchTerm: null
+    searchTerm: null,
+    bookList: [],
   }
 
  
 
   handleFetch = (fetchTerm) => {
 
-   function populateSearch(book) {
-     console.log("populateSearch ran");
-      console.log("The book should be full: " + JSON.stringify(book));
-    }
+    //console.log('handleFetch ran: ' + fetchTerm);
 
-    console.log('handleFetch ran: ' + fetchTerm);
-
-    var book = {}
-
-    console.log("The book is empty: " + JSON.stringify(book));
-
-    fetch(fetchTerm)
+    var list = fetch(fetchTerm)
     .then(response => response.json())
     .then(responseJSON => {
       console.log(responseJSON);
       
-      book.name = responseJSON.items[0].volumeInfo.title;
-      book.author = responseJSON.items[0].volumeInfo.authors[0];
-      book.price = responseJSON.items[0].saleInfo.listPrice.amount;
-      book.currency = responseJSON.items[0].saleInfo.listPrice.currencyCode;
-      book.summery = responseJSON.items[0].searchInfo.textSnippet;
-      populateSearch(book);
+      var bookList = responseJSON.items.slice(0,5).map((item, idx) => {
+        console.log(item);
+        console.log(idx);
+
+        var book = {};
+
+          book.name = item.volumeInfo.title;
+          book.author = item.volumeInfo.authors[0];
+
+          //console.log("Sale info: " + item.saleInfo.saleability);
+
+          if (item.saleInfo.saleability === "FOR_SALE"){
+            //console.log('calculating price');
+              book.price = item.saleInfo.listPrice.amount + " " + item.saleInfo.listPrice.currencyCode;
+            }
+          else{
+            console.log('not for sale');
+          }
+
+          book.summery = item.searchInfo.textSnippet;
+
+          return(book)
+      })
+
+      console.log('array: ' + bookList);
+      return bookList;
+
     });
+
+    return list;
   }
+
+ 
 
   
   handleSearch = (bookTitle) => {
@@ -46,13 +63,21 @@ class App extends Component {
 
     const termSearch = "https://www.googleapis.com/books/v1/volumes?q=" + bookTitle + "+inauthor&key=AIzaSyAb3LAdKu4-W2SQLrj3oEOH-QKDdsof0es"
 
-    this.setState({
-      search: bookTitle,
-      searchTerm: termSearch
+    const books = new Promise((resolve, reject) =>
+    {
+      const newList = this.handleFetch(termSearch);
+      resolve(newList);
     });
-
-    this.handleFetch(termSearch);
-
+    
+    books.then((list) => {
+      //(console.log("books promise: " + list));
+      this.setState({
+        search: bookTitle,
+        searchTerm: termSearch,
+        bookList: list,
+      });
+    }
+    ).catch(() => {(console.log("Search error!"))});
   }
 
 
