@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 
 class Book extends Component {
+
     render(){
 
         const name = this.props.name;
         const author = this.props.author;
         const price = this.props.price;
         const summery = this.props.summery;
+        const link = this.props.link;
 
         return(
             <div>
@@ -14,7 +16,9 @@ class Book extends Component {
                 <h2>By: {author}</h2>
                 <p>Price: {price}</p>
                 <p>About: {summery}</p>
+                <a target="_blank" href={link}>Book Page</a>
             </div>
+           
         )
     }
 }

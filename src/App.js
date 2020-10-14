@@ -20,11 +20,11 @@ class App extends Component {
     var list = fetch(fetchTerm)
     .then(response => response.json())
     .then(responseJSON => {
-      console.log(responseJSON);
+      //console.log(responseJSON);
       
-      var bookList = responseJSON.items.slice(0,5).map((item, idx) => {
-        console.log(item);
-        console.log(idx);
+      var bookList = responseJSON.items.slice(0,10).map((item, idx) => {
+        //console.log(item);
+        //console.log(idx);
 
         var book = {};
 
@@ -38,15 +38,19 @@ class App extends Component {
               book.price = item.saleInfo.listPrice.amount + " " + item.saleInfo.listPrice.currencyCode;
             }
           else{
-            console.log('not for sale');
+            //console.log('not for sale');
+              book.price = "N/A";
           }
 
           book.summery = item.searchInfo.textSnippet;
 
+          book.link = item.volumeInfo.infoLink;
+          //console.log('link: ' + item.volumeInfo.infoLink);
+
           return(book)
       })
 
-      console.log('array: ' + bookList);
+      //console.log('array: ' + bookList);
       return bookList;
 
     });
@@ -59,7 +63,7 @@ class App extends Component {
   
   handleSearch = (bookTitle) => {
 
-    console.log('handleSearch ran');
+    //console.log('handleSearch ran');
 
     const termSearch = "https://www.googleapis.com/books/v1/volumes?q=" + bookTitle + "+inauthor&key=AIzaSyAb3LAdKu4-W2SQLrj3oEOH-QKDdsof0es"
 
@@ -83,18 +87,15 @@ class App extends Component {
 
   render(){
 
-    const tempList = [
-      {name: "Moby Dick", author: "My boy", price: "3.50", summery: "Whale gets killed"},
-      {name: "Don't Stop", author: "My girl", price: "500", summery: "A made up book"},
-      {name: "Punchmaster", author: "Sensei", price: "Free", summery: "Punchmaster punches"},
-      {name: "da Jetts", author: "Z the Man", price: "2 whole dollars", summery: "Something happens, probably"}
-  ];
+    const realList = this.state.bookList.length === 0
+      ? <p>Please search for a book</p>
+      : <Result books={this.state.bookList}/>;
   
     return (
       <div className="App">
        <h1 className="title" >Google Book Search</h1>
        <Search onSearch={this.handleSearch}/>
-       <Result books={tempList}/>
+       {realList}
       </div>
     );
   }

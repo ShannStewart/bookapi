@@ -12,6 +12,7 @@ class Result extends Component {
                 author={item.author}
                 price={item.price}
                 summery={item.summery}
+                link={item.link}
             />);
 
         return(
